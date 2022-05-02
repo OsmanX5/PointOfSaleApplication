@@ -30,7 +30,7 @@ Developing a POS application for mangment the sells and print invoices.
 
 ## About the Application
 this application using GUI to write the invoice without needing for a keyboard and then save the invoice in a .pdf format and print it using __XPrinter__
-![POS](https://user-images.githubusercontent.com/103122098/166197306-a84fc4c3-f40d-4cbe-8cdc-d8b20d1e0a97.png)
+![POS](https://user-images.githubusercontent.com/103122098/166197634-4e9ecdba-6d8f-4162-82ee-5d11465f79dc.png)
 
 ---
 
