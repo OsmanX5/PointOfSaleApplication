@@ -138,11 +138,6 @@ class PDFCreator {
       alignment: pw.Alignment.centerLeft,
       child: pw.Text(
         "name :" + customer!.name,
-        style: pw.TextStyle(
-          fontSize: 11,
-          fontBold: this.robotoBold,
-          fontWeight: pw.FontWeight.bold,
-        ),
       ),
     );
   }
