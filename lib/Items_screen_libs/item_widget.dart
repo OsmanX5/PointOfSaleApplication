@@ -114,6 +114,7 @@ class _ItemWidgetState extends State<ItemWidget> {
       currentCustomer.invoiceItems[index].qty += 1;
     } else {
       currentCustomer.invoiceItems.add(InvoiceItem(
+        category: widget.item.category,
         name: widget.item.name,
         details: widget.item.details.keys.first,
         price: widget.item.details[widget.item.details.keys.first] ?? 1,

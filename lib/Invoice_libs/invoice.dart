@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:pos_labmed/Items_screen_libs/specificationScreen.dart';
 import 'customer.dart';
 import 'invoice_item.dart';
 import 'package:pos_labmed/main.dart';
@@ -31,7 +32,6 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
   void initState() {
     super.initState();
     widget.stream.listen((event) {
-      print(event);
       refresh();
     });
   }
@@ -42,7 +42,6 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print("Istarted again");
     return Container(
       margin: const EdgeInsets.only(right: 30, top: 30, bottom: 30),
       width: 588,
@@ -202,8 +201,10 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
 
   // a function convert list of items data to list of items widgets
   List<Widget> invoiceItemsBuilder(List<InvoiceItem>? items) {
+    int counter = 0;
     List<Widget> itemsWidget = [];
     items?.forEach((item) {
+      counter += 1;
       itemsWidget.add(
         Container(
           padding: const EdgeInsets.symmetric(vertical: 10),
@@ -219,24 +220,42 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
             leading: Container(
               width: 150,
               height: 65,
-              child: Column(
+              child: Row(
                 children: [
-                  Text(
-                    item.name,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.black,
+                  Container(
+                    width: 30,
+                    height: 30,
+                    child: Text(
+                      counter.toString(),
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
-                  Text(
-                    item.details,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black,
-                    ),
-                  )
+                  Column(
+                    children: [
+                      //Name
+                      Text(
+                        item.name,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.black,
+                        ),
+                      ),
+                      //Company
+                      Text(
+                        item.details,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
+                      )
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -416,7 +435,9 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
   void deletInvoiceItem(InvoiceItem item) {
     for (int i = 0; i < currentCustomer.invoiceItems.length; i++)
       if ((currentCustomer.invoiceItems[i].name == item.name) &&
-          (currentCustomer.invoiceItems[i].details == item.details))
+          (currentCustomer.invoiceItems[i].details == item.details)) {
         currentCustomer.invoiceItems.removeAt(i);
+        SpecificationScreen(toSaleItem: item.getDataBaseItem());
+      }
   }
 }

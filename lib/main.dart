@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pos_labmed/Invoice_libs/customer.dart';
@@ -7,8 +6,10 @@ import 'package:pos_labmed/home.dart';
 import 'package:pos_labmed/Items_screen_libs/item.dart';
 import 'package:pos_labmed/pdf/pdf_creater.dart';
 import 'package:window_manager/window_manager.dart';
-
 import 'Invoice_libs/invoice_item.dart';
+import 'package:dynamic_theme/dynamic_theme.dart';
+
+///
 
 Map<String, List<Item>> data = {};
 String currentdate =
@@ -35,6 +36,7 @@ Future<void> main() async {
   orders = ordersHistory.get(currentdate);
 
   currentCustomer = new Customer(orderNo: orders);
+  printAllData();
   runApp(MaterialApp(
     theme: ThemeData(
         fontFamily: 'Roboto',
@@ -44,18 +46,17 @@ Future<void> main() async {
     home: Home(),
     debugShowCheckedModeBanner: false,
   ));
-  
-  
-  
- WidgetsFlutterBinding.ensureInitialized();
- await windowManager.ensureInitialized();
- windowManager.waitUntilReadyToShow().then((_) async {
- await windowManager.setTitleBarStyle(TitleBarStyle.hidden);
- await windowManager.setFullScreen(true);
- await windowManager.center();
-  await windowManager.show();
- await windowManager.setSkipTaskbar(false);
- });
+
+/*
+  WidgetsFlutterBinding.ensureInitialized();
+  await windowManager.ensureInitialized();
+  windowManager.waitUntilReadyToShow().then((_) async {
+    await windowManager.setTitleBarStyle(TitleBarStyle.hidden);
+    await windowManager.setFullScreen(false);
+    // await windowManager.center();
+    // await windowManager.show();
+    await windowManager.setSkipTaskbar(true);
+  });*/
 }
 
 //read all data inside a box
@@ -63,21 +64,13 @@ Map<String, List<Item>> boxDataRead(Box box) {
   Map<String, List<Item>> data = {};
   box.keys.forEach((key) {
     data[key] = List<Item>.from(box.get(key));
-    ;
   });
 
   return data;
 }
 
-// to print all data in the item list
-void showData(Map<String, List<Item>> data) {
-  List keys = data.keys.toList();
-  keys.forEach((key) {
-    print(key);
-    List<Item>? items = data[key];
-    items?.forEach((item) {
-      print("${item.name}  || ${item.details}");
-    });
+void printAllData() {
+  data.forEach((key, value) {
+    print("Key :${key} , value : ${value}");
   });
 }
-

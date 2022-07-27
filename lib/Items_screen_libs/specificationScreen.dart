@@ -7,7 +7,7 @@ class SpecificationScreen extends StatefulWidget {
   Item toSaleItem;
   String selected_key = "";
   double currentPrice = 0;
-  double qty = 1;
+  double qty = 0;
   double total = 0;
 
   SpecificationScreen({required this.toSaleItem}) {
@@ -228,6 +228,7 @@ class _SpecificationScreenState extends State<SpecificationScreen> {
       currentCustomer.invoiceItems[index].qty += widget.qty;
     } else {
       currentCustomer.invoiceItems.add(InvoiceItem(
+        category: widget.toSaleItem.category,
         name: widget.toSaleItem.name,
         details: widget.selected_key,
         price: widget.currentPrice,

@@ -273,7 +273,7 @@ class PDFCreator {
   void savePDF(pw.Document pdf) async {
     String path = "C:/labmedData/invoices/";
     String name =
-        "${time.year}_${time.month}_${time.day}___${orders}____${customer!.name}.pdf";
+        "${time.year}_${time.month}_${time.day}___${orders}____${customer!.name}____${customer!.total}.pdf";
     final file = File(path + name);
     await file.writeAsBytes(await pdf.save());
     await Printing.layoutPdf(

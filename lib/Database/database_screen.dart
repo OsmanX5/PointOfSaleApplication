@@ -18,7 +18,6 @@ class _DataBaseScreenState extends State<DataBaseScreen> {
   TextEditingController precentage = TextEditingController(text: "5");
   @override
   Widget build(BuildContext context) {
-    print("Build ${data["ICT"]![0].name}:${data["ICT"]![0].details}");
     return Container(
       color: Color.fromARGB(255, 20, 20, 20),
       child: Column(
@@ -266,7 +265,6 @@ class _DataBaseScreenState extends State<DataBaseScreen> {
   }
 
   void changePrices2Category(String categoy, double precentage) {
-    print(precentage);
     for (int i = 0; i < data[categoy]!.length; i++) {
       data[categoy]![i].details.forEach((key, value) {
         data[categoy]![i].details[key] = value * (1 + precentage / 100);

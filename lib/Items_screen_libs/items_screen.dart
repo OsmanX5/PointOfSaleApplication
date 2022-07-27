@@ -85,14 +85,12 @@ class _ItemsWidgetState extends State<ItemsWidget> {
   }
 
   void nullSafty() {
-    print(data.keys);
     categories.forEach((element) {
       if (!data.containsKey(element)) {
         data[element] = [];
       }
     });
     data.forEach((key, value) {
-      print("$key, $value");
       if (data[key]!.isEmpty) {
         data[key] = [
           Item("$key", "new Item", {"comp": 0})

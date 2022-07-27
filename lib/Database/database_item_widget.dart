@@ -240,12 +240,7 @@ class _DatabaseItemWidgetState extends State<DatabaseItemWidget> {
   }
 
   void delet() {
-    print("deleted");
-
     data[widget.item.category]!.removeAt(widget.index);
-    data[widget.item.category]!.forEach(
-      (element) => print(element.name),
-    );
     widget.refresh();
   }
 
