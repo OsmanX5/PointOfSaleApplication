@@ -1,12 +1,16 @@
-import 'package:pos_labmed/home.dart';
+import 'package:flutter/material.dart';
+
 class HotRestartController extends StatefulWidget {
   final Widget child;
 
-  HotRestartController({this.child});
+  HotRestartController({required this.child});
 
-  sctatic performHotRestart(BuildContext context) {
-    final _HotRestartControllerState state = context.ancestorStateOfType(const TypeMatcher<_HotRestartControllerState>());
-    state.performHotRestart();
+  static performHotRestart(BuildContext context) {
+    if (context.findAncestorStateOfType<_HotRestartControllerState>() != null) {
+      final _HotRestartControllerState? state =
+          context.findAncestorStateOfType<_HotRestartControllerState>();
+      state?.performHotRestart();
+    }
   }
 
   @override

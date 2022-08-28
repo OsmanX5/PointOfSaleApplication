@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 import 'package:pos_labmed/Header%20libs/header_icon.dart';
+import 'package:pos_labmed/HotRestart.dart';
+import 'package:pos_labmed/Invoice_libs/invoice_item.dart';
+import 'package:pos_labmed/Items_screen_libs/item.dart';
 import 'package:pos_labmed/customer_screen.dart';
 import 'package:pos_labmed/main.dart';
 
@@ -12,9 +16,14 @@ class Header extends StatefulWidget {
 }
 
 class _HeaderState extends State<Header> {
+  BuildContext? _context;
   bool databaseHover = false;
+  String Emptyname = "";
+  String Emptyprice = "0";
+  String Emptyqty = "1";
   @override
   Widget build(BuildContext context) {
+    _context = context;
     return Container(
       width: 1920,
       height: 70,
@@ -53,14 +62,11 @@ class _HeaderState extends State<Header> {
       width: 700,
       padding: EdgeInsets.only(left: 10),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        EmptyItemIcon(),
         dataBaseIcon(),
         saveIcon(),
         historyIcon(),
-        Icon(
-          Icons.settings,
-          size: 64,
-          color: Colors.white,
-        ),
+        AllItemsIcon(),
       ]),
     );
   }
@@ -95,15 +101,32 @@ class _HeaderState extends State<Header> {
     );
   }
 
+  Widget AllItemsIcon() {
+    return HeaderIcon(
+      icon: const Icon(
+        Icons.all_inbox,
+        size: 48,
+      ),
+      tapFunction: AllItems,
+    );
+  }
+
+  Widget EmptyItemIcon() {
+    return HeaderIcon(
+      icon: const Icon(
+        Icons.add,
+        size: 48,
+      ),
+      tapFunction: addEmpty,
+    );
+  }
+
   void openDataBase() {
     widget.dataBaseCallBack();
   }
 
   void save() {
     dataBox.clear();
-    data["ICT"]?.sort(
-      (a, b) => a.name.compareTo(b.name),
-    );
     data.forEach((key, value) {
       dataBox.put(key, value);
     });
@@ -128,5 +151,120 @@ class _HeaderState extends State<Header> {
                     )),
               ],
             ));
+  }
+
+  void AllItems() {
+    data.forEach((category, itemsList) {
+      itemsList.forEach((item) {
+        item.details.forEach((company, price) {
+          currentCustomer.invoiceItems.add(
+            new InvoiceItem(
+                category: category,
+                name: item.name,
+                details: company,
+                price: price,
+                qty: 1),
+          );
+        });
+      });
+    });
+    HotRestartController.performHotRestart(context);
+  }
+
+  void addEmpty() {
+    showPopScreen(_context);
+  }
+
+  Future<void> showPopScreen(BuildContext) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: EmptyScreen(),
+          actions: [
+            HeaderIcon(
+                tapFunction: addEmptyToInvoice,
+                icon: Icon(
+                  Icons.add,
+                  size: 64,
+                ))
+          ],
+        );
+      },
+    );
+  }
+
+  Widget EmptyScreen() {
+    return Container(
+      height: 280,
+      child: Column(children: [
+        // Name
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: TextField(
+            onChanged: (x) {
+              Emptyname = x;
+            },
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+            ),
+            textDirection: TextDirection.ltr,
+            style: const TextStyle(
+              fontSize: 28,
+              color: Colors.black,
+            ),
+          ),
+        ),
+
+        // price
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: TextField(
+            onChanged: (x) {
+              Emptyprice = x;
+            },
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.euro),
+              border: OutlineInputBorder(),
+            ),
+            textDirection: TextDirection.ltr,
+            style: const TextStyle(
+              fontSize: 28,
+              color: Colors.black,
+            ),
+          ),
+        ),
+
+        // Quantity
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: TextField(
+            onChanged: (x) {
+              Emptyqty = x;
+            },
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.numbers),
+              border: OutlineInputBorder(),
+            ),
+            textDirection: TextDirection.ltr,
+            style: const TextStyle(
+              fontSize: 28,
+              color: Colors.black,
+            ),
+          ),
+        ),
+      ]),
+    );
+  }
+
+  void addEmptyToInvoice() {
+    currentCustomer.invoiceItems.add(InvoiceItem(
+      category: "LAB",
+      name: Emptyname,
+      details: "",
+      price: double.parse(Emptyprice),
+      qty: double.parse(Emptyqty),
+    ));
+    HotRestartController.performHotRestart(context);
   }
 }

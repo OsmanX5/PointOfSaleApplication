@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pos_labmed/Items_screen_libs/catedory.dart';
 import 'package:pos_labmed/Items_screen_libs/specificationScreen.dart';
+import 'package:pos_labmed/SpecialAction.dart';
 import 'package:pos_labmed/main.dart';
 
 import 'item.dart';
@@ -41,19 +42,18 @@ class _ItemsWidgetState extends State<ItemsWidget> {
               children: [
                 Category(
                   name: "ICT",
-                  h: 4,
-                  w: 3,
+                  h: 3,
+                  w: 4,
                   color: Color.fromARGB(136, 255, 82, 82),
                   setItemFunction: callback,
                 ),
                 Category(
                   name: "Containers",
-                  w: 3,
-                  h: 4,
+                  w: 5,
+                  h: 3,
                   color: Color.fromARGB(120, 50, 170, 220),
                   setItemFunction: callback,
                 ),
-                SpecificationScreen(toSaleItem: toSaleItem)
               ],
             ),
             Row(
@@ -61,19 +61,19 @@ class _ItemsWidgetState extends State<ItemsWidget> {
                 Category(
                     name: "LAB",
                     w: 3,
-                    h: 6,
+                    h: 8,
                     color: Color.fromARGB(120, 15, 150, 109),
                     setItemFunction: callback),
                 Category(
                     name: "Reagents",
                     w: 3,
-                    h: 6,
+                    h: 8,
                     color: Color.fromARGB(120, 233, 124, 0),
                     setItemFunction: callback),
                 Category(
                     name: "Devices",
                     w: 3,
-                    h: 6,
+                    h: 8,
                     color: Color.fromARGB(120, 112, 112, 220),
                     setItemFunction: callback),
               ],

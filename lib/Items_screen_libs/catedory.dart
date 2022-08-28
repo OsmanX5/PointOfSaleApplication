@@ -52,7 +52,7 @@ class _CategoryState extends State<Category> {
           //category Items
           child: GridView.count(
             controller: ScrollController(),
-            crossAxisCount: 3,
+            crossAxisCount: widget.w,
             crossAxisSpacing: 2,
             mainAxisSpacing: 2,
             childAspectRatio: 2,

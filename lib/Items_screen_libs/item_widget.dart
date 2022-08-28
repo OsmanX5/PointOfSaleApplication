@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pos_labmed/Invoice_libs/invoice_item.dart';
+import 'package:pos_labmed/Items_screen_libs/specificationScreen.dart';
 import 'package:pos_labmed/main.dart';
 
 import 'item.dart';
@@ -35,7 +36,7 @@ class _ItemWidgetState extends State<ItemWidget> {
                 streamController.add(true);
               },
               onDoubleTap: () {
-                widget.setItemFunction(widget.item);
+                showPopScreen(context, widget.item);
               },
               onHover: (hovering) {
                 setState(() => isHovering = hovering);
@@ -121,5 +122,16 @@ class _ItemWidgetState extends State<ItemWidget> {
         qty: 1,
       ));
     }
+  }
+
+  Future<void> showPopScreen(BuildContext, Item) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: SpecificationScreen(toSaleItem: Item),
+        );
+      },
+    );
   }
 }

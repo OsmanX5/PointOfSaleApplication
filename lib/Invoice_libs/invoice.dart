@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:pos_labmed/HotRestart.dart';
 import 'package:pos_labmed/Items_screen_libs/specificationScreen.dart';
 import 'customer.dart';
 import 'invoice_item.dart';
@@ -28,6 +29,7 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
   bool check = false;
   bool debt = false;
   bool printhovering = false;
+  ScrollController _scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
@@ -37,7 +39,9 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
   }
 
   refresh() {
-    setState(() {});
+    setState(() {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    });
   }
 
   @override
@@ -195,7 +199,7 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
         width: 525,
         height: 500,
         child: ListView(
-            controller: ScrollController(),
+            controller: _scrollController,
             children: invoiceItemsBuilder(currentCustomer.invoiceItems)));
   }
 
@@ -211,98 +215,104 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
           decoration: BoxDecoration(
               border: Border.all(),
               borderRadius: const BorderRadius.all(const Radius.circular(10))),
-          child: ListTile(
+          child: InkWell(
+            onDoubleTap: () {
+              editInvoiceItem(item);
+              refresh();
+            },
             onLongPress: () {
               deletInvoiceItem(item);
               refresh();
             },
-            // Name and company
-            leading: Container(
-              width: 150,
-              height: 65,
-              child: Row(
-                children: [
-                  Container(
-                    width: 30,
-                    height: 30,
-                    child: Text(
-                      counter.toString(),
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      //Name
-                      Text(
-                        item.name,
+            child: ListTile(
+              // Name and company
+              leading: Container(
+                width: 150,
+                height: 65,
+                child: Row(
+                  children: [
+                    Container(
+                      width: 30,
+                      height: 30,
+                      child: Text(
+                        counter.toString(),
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w900,
                           color: Colors.black,
                         ),
                       ),
-                      //Company
-                      Text(
-                        item.details,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
+                    ),
+                    Column(
+                      children: [
+                        //Name
+                        Text(
+                          item.name,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.black,
+                          ),
                         ),
-                      )
-                    ],
-                  ),
-                ],
+                        //Company
+                        Text(
+                          item.details,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
 
-            // price x qyantity
-            title: Container(
-              alignment: Alignment.center,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    item.price.toStringAsFixed(0),
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black,
+              // price x qyantity
+              title: Container(
+                alignment: Alignment.center,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      item.price.toStringAsFixed(0),
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
-                  const Text(
-                    "  X  ",
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.black,
+                    const Text(
+                      "  X  ",
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
-                  Text(
-                    item.qty.toStringAsFixed(0),
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.black,
-                    ),
-                  )
-                ],
+                    Text(
+                      item.qty.toStringAsFixed(0),
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.black,
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
 
-            //total
-            trailing: Container(
-              width: 90,
-              child: Text(
-                item.total.toStringAsFixed(0),
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.black,
+              //total
+              trailing: Container(
+                width: 90,
+                child: Text(
+                  item.total.toStringAsFixed(0),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ),
@@ -437,7 +447,26 @@ class _InvoiceWidgetState extends State<InvoiceWidget> {
       if ((currentCustomer.invoiceItems[i].name == item.name) &&
           (currentCustomer.invoiceItems[i].details == item.details)) {
         currentCustomer.invoiceItems.removeAt(i);
-        SpecificationScreen(toSaleItem: item.getDataBaseItem());
       }
+  }
+
+  void editInvoiceItem(InvoiceItem item) {
+    for (int i = 0; i < currentCustomer.invoiceItems.length; i++)
+      if ((currentCustomer.invoiceItems[i].name == item.name) &&
+          (currentCustomer.invoiceItems[i].details == item.details)) {
+        currentCustomer.invoiceItems.removeAt(i);
+        showPopScreen(context, item.getDataBaseItem());
+      }
+  }
+
+  Future<void> showPopScreen(BuildContext, Item) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: SpecificationScreen(toSaleItem: Item),
+        );
+      },
+    );
   }
 }

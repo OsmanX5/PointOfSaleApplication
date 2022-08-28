@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pos_labmed/Invoice_libs/customer.dart';
 import 'package:pos_labmed/main.dart';
 
+import 'HotRestart.dart';
+
 class CustomerWidget extends StatefulWidget {
   Customer customer;
   CustomerWidget({required this.customer});
@@ -20,6 +22,8 @@ class _CustomerWidgetState extends State<CustomerWidget> {
             currentCustomer = widget.customer;
             Navigator.pop(context);
             setState(() {});
+            print("start");
+            HotRestartController.performHotRestart(context);
           },
           leading: Icon(Icons.person),
           title: Text(widget.customer.name),

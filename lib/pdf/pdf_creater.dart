@@ -2,7 +2,9 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path_provider_windows/path_provider_windows.dart';
+import 'package:pdf/widgets.dart';
 
 import 'package:pos_labmed/Invoice_libs/customer.dart';
 import 'package:pos_labmed/Invoice_libs/invoice_item.dart';
@@ -10,16 +12,19 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pos_labmed/main.dart';
 import 'package:printing/printing.dart';
+import 'package:flutter/services.dart';
 
 class PDFCreator {
   Customer? customer;
   final time = DateTime.now();
   final Uint8List fontData =
       File("C:/labmedData/fonts/Roboto_Regular.ttf").readAsBytesSync();
-  final Uint8List fontDataBold =
+  var fontDataBold =
       File("C:/labmedData/fonts/Roboto_Bold.ttf").readAsBytesSync();
   get roboto => pw.Font.ttf(fontData.buffer.asByteData());
   get robotoBold => pw.Font.ttf(fontDataBold.buffer.asByteData());
+  var arabicFontData;
+  var arabicFont;
   PDFCreator({this.customer}) {}
 
   //############ #Functions  ############
@@ -40,7 +45,8 @@ class PDFCreator {
                     invoiceList(),
                     pw.SizedBox(height: 50),
                     total(),
-                    pw.SizedBox(height: 100),
+                    pw.SizedBox(height: 150),
+                    pw.Text("ThankYou")
                   ],
                 )),
           ); // Center
@@ -136,9 +142,8 @@ class PDFCreator {
           border: pw.Border.all(), borderRadius: pw.BorderRadius.circular(5)),
       padding: pw.EdgeInsets.only(left: 2),
       alignment: pw.Alignment.centerLeft,
-      child: pw.Text(
-        "name :" + customer!.name,
-      ),
+      child: pw.Text("name :" + customer!.name,
+          style: pw.TextStyle(font: arabicFont)),
     );
   }
 
@@ -175,14 +180,14 @@ class PDFCreator {
 
   pw.Widget invoicePDFWidget(InvoiceItem item) {
     return pw.Container(
-        height: 40,
-        width: 180,
-        decoration: pw.BoxDecoration(
-          border: pw.Border.symmetric(horizontal: pw.BorderSide()),
-        ),
-        alignment: pw.Alignment.centerLeft,
-        child: pw.Center(
-            child: pw.Row(children: [
+      height: 40,
+      width: 180,
+      decoration: pw.BoxDecoration(
+        border: pw.Border.symmetric(horizontal: pw.BorderSide()),
+      ),
+      alignment: pw.Alignment.centerLeft,
+      child: pw.Center(
+        child: pw.Row(children: [
           //NAME& COMPANY
           pw.Container(
             alignment: pw.Alignment.center,
@@ -241,7 +246,9 @@ class PDFCreator {
                   fontWeight: pw.FontWeight.bold),
             ),
           ),
-        ])));
+        ]),
+      ),
+    );
   }
 
   List<pw.Widget> invoicePDFWidgetBuilder(List<InvoiceItem> items) {

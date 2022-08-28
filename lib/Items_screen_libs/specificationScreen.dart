@@ -188,6 +188,7 @@ class _SpecificationScreenState extends State<SpecificationScreen> {
         onTap: () {
           addItem2Invoice();
           streamController.add(true);
+          Navigator.pop(context);
         },
         onHover: (hovering) {
           setState(() => addHover = hovering);
@@ -232,7 +233,7 @@ class _SpecificationScreenState extends State<SpecificationScreen> {
         name: widget.toSaleItem.name,
         details: widget.selected_key,
         price: widget.currentPrice,
-        qty: widget.qty,
+        qty: widget.qty == 0 ? 1 : widget.qty,
       ));
     }
   }
